@@ -5,22 +5,39 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
-  <<: *default
-  database: baseconnect_backend_development
-  host: 127.0.0.1
-  port: 5432
-  # If you created a local role in pgAdmin, uncomment:
-  # username: jobs_user
-  # password: jobs_pass
+  primary:
+    <<: *default
+    database: baseconnect_backend_development
+    host: 127.0.0.1
+    port: 5432
+    # username: jobs_user   # uncomment if you created a local role
+    # password: jobs_pass
+  cable:
+    <<: *default
+    database: baseconnect_backend_development
+    host: 127.0.0.1
+    port: 5432
+    # username: jobs_user
+    # password: jobs_pass
 
 test:
-  <<: *default
-  database: baseconnect_backend_test
-  host: 127.0.0.1
-  port: 5432
+  primary:
+    <<: *default
+    database: baseconnect_backend_test
+    host: 127.0.0.1
+    port: 5432
+  cable:
+    <<: *default
+    database: baseconnect_backend_test
+    host: 127.0.0.1
+    port: 5432
 
-# DO NOT inherit *default here (to avoid carrying host/user/password)
+# IMPORTANT: use DATABASE_URL on Heroku and define a cable database too
 production:
-  url: <%= ENV["DATABASE_URL"] %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  # sslmode: require   # optional; Heroku’s DATABASE_URL usually includes SSL params
+  primary:
+    url: <%= ENV["DATABASE_URL"] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  cable:
+    # Use a separate SOLID_CABLE_DATABASE_URL if you ever want to split it out.
+    url: <%= ENV["SOLID_CABLE_DATABASE_URL"] || ENV["DATABASE_URL"] %>
+    pool: 5
