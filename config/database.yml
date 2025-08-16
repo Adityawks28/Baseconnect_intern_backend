@@ -1,4 +1,5 @@
 # config/database.yml
+
 default: &default
   adapter: postgresql
   encoding: unicode
@@ -7,37 +8,39 @@ default: &default
 development:
   primary:
     <<: *default
-    database: baseconnect_backend_development
+    database: jobs_api_development
     host: 127.0.0.1
     port: 5432
-    # username: jobs_user   # uncomment if you created a local role
-    # password: jobs_pass
+    username: <%= ENV.fetch("PGUSER", "jobs_user") %>
+    password: <%= ENV.fetch("PGPASSWORD", "jobs_pass") %>
   cable:
     <<: *default
-    database: baseconnect_backend_development
+    database: jobs_api_development
     host: 127.0.0.1
     port: 5432
-    # username: jobs_user
-    # password: jobs_pass
+    username: <%= ENV.fetch("PGUSER", "jobs_user") %>
+    password: <%= ENV.fetch("PGPASSWORD", "jobs_pass") %>
 
 test:
   primary:
     <<: *default
-    database: baseconnect_backend_test
+    database: jobs_api_development
     host: 127.0.0.1
     port: 5432
+    username: <%= ENV.fetch("PGUSER", "jobs_user") %>
+    password: <%= ENV.fetch("PGPASSWORD", "jobs_pass") %>
   cable:
     <<: *default
-    database: baseconnect_backend_test
+    database: jobs_api_development
     host: 127.0.0.1
     port: 5432
+    username: <%= ENV.fetch("PGUSER", "jobs_user") %>
+    password: <%= ENV.fetch("PGPASSWORD", "jobs_pass") %>
 
-# IMPORTANT: use DATABASE_URL on Heroku and define a cable database too
 production:
   primary:
     url: <%= ENV["DATABASE_URL"] %>
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   cable:
-    # Use a separate SOLID_CABLE_DATABASE_URL if you ever want to split it out.
     url: <%= ENV["SOLID_CABLE_DATABASE_URL"] || ENV["DATABASE_URL"] %>
     pool: 5
