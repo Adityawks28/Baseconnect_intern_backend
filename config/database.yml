@@ -26,6 +26,13 @@ development:
     port: 5432
     username: <%= ENV.fetch("PGUSER", "jobs_user") %>
     password: <%= ENV.fetch("PGPASSWORD", "jobs_pass") %>
+  cache:
+    <<: *default
+    database: jobs_api_development
+    host: 127.0.0.1
+    port: 5432
+    username: <%= ENV.fetch("PGUSER", "jobs_user") %>
+    password: <%= ENV.fetch("PGPASSWORD", "jobs_pass") %>
 
 test:
   primary:
@@ -49,14 +56,24 @@ test:
     port: 5432
     username: <%= ENV.fetch("PGUSER", "jobs_user") %>
     password: <%= ENV.fetch("PGPASSWORD", "jobs_pass") %>
+  cache:
+    <<: *default
+    database: jobs_api_test
+    host: 127.0.0.1
+    port: 5432
+    username: <%= ENV.fetch("PGUSER", "jobs_user") %>
+    password: <%= ENV.fetch("PGPASSWORD", "jobs_pass") %>
 
 production:
   primary:
     url: <%= ENV["DATABASE_URL"] %>
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   cable:
-    url: <%= ENV["SOLID_CABLE_DATABASE_URL"] || ENV["DATABASE_URL"] %>
+    url: <%= ENV["DATABASE_URL"] %>
     pool: 5
   queue:
-    url: <%= ENV["SOLID_QUEUE_DATABASE_URL"] || ENV["DATABASE_URL"] %>
+    url: <%= ENV["DATABASE_URL"] %>
+    pool: 5
+  cache:
+    url: <%= ENV["DATABASE_URL"] %>
     pool: 5
