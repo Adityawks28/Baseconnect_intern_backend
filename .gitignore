@@ -30,3 +30,15 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+/log
+/tmp
+/vendor/bundle
+/node_modules
+.byebug_history
+.env
+.env.*
+/storage/*
+config/master.key
+coverage
+# Rails assets (kalau non-API)
+public/assets
